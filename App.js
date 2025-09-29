@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 
-import { Perms, Scan } from "./components/home.js";
+import { Perms, Scan, Result } from "./components/home.js";
 import { History } from "./components/history.js";
 
 const homeStack = createNativeStackNavigator();
@@ -16,6 +16,7 @@ function HomeS() {
     <homeStack.Navigator>
       <homeStack.Screen name="Perms" component={Perms} />
       <homeStack.Screen name="Scan" component={Scan} />
+      <homeStack.Screen name="Result" component={Result} />
     </homeStack.Navigator>
   );
 }
