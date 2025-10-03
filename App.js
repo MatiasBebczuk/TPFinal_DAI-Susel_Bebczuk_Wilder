@@ -1,5 +1,4 @@
 import { StatusBar } from 'expo-status-bar';
-import { View, Text } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -7,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { Perms, Scan, Result } from "./components/home.js";
 import { History } from "./components/history.js";
+import { About } from "./components/about.js";
 
 const homeStack = createNativeStackNavigator();
 const settingsStack = createNativeStackNavigator();
@@ -14,9 +14,9 @@ const settingsStack = createNativeStackNavigator();
 function HomeS() {
   return (
     <homeStack.Navigator>
-      <homeStack.Screen name="Perms" component={Perms} />
-      <homeStack.Screen name="Scan" component={Scan} />
-      <homeStack.Screen name="Result" component={Result} />
+      <homeStack.Screen options={{headerShown: false}} name="Perms" component={Perms} />
+      <homeStack.Screen options={{headerShown: false}} name="Scan" component={Scan} />
+      <homeStack.Screen options={{headerShown: false}} name="Result" component={Result} />
     </homeStack.Navigator>
   );
 }
@@ -24,7 +24,15 @@ function HomeS() {
 function HistoryS() {
   return (
     <settingsStack.Navigator>
-      <settingsStack.Screen name="Historial" component={History} />
+      <settingsStack.Screen options={{headerShown: false}} name="Historial" component={History} />
+    </settingsStack.Navigator>
+  );
+}
+
+function AboutS() {
+  return (
+    <settingsStack.Navigator>
+      <settingsStack.Screen options={{headerShown: false}} name="Acerca de" component={About} />
     </settingsStack.Navigator>
   );
 }
@@ -81,8 +89,19 @@ export default function App() {
               title: 'Historial',
               tabBarIcon: ({ color }) => (
                 <Ionicons name="time-outline" size={22} color={color} />
+                ),
+                headerTitle: 'Lector QR',
+              }}
+          />
+          <Tab.Screen
+            name="About"
+            component={AboutS}
+            options={{
+              title: 'Acerca de',
+              tabBarIcon: ({ color }) => (
+                <Ionicons name="information" size={22} color={color} />
               ),
-              headerTitle: 'Historial',
+              headerTitle: 'Lector QR',
             }}
           />
         </Tab.Navigator>
