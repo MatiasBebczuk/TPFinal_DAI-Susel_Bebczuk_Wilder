@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { View, Button, Text, Linking } from 'react-native';
+import { View, Button, Text, Linking, Pressable } from 'react-native';
 import { Camera, CameraView } from 'expo-camera';
 import { useEffect, useState } from 'react';
 import * as Clipboard from "expo-clipboard";
@@ -20,13 +20,36 @@ export function Perms(){
         askForCameraPermission();
     }, []);
 
-    return (<View>
+    return (<View style={{ flex: 1, backgroundColor: '#f7f7f8', padding: 16, gap: 16, justifyContent: 'center' }}>
         {
             hasPermission ?
-            <Button onPress={() => navigator.navigate("Scan")} title="Escanear QR"/>
+            <Pressable
+                onPress={() => navigator.navigate("Scan")}
+                style={({ pressed }) => ({
+                    backgroundColor: pressed ? '#0284c7' : '#0ea5e9',
+                    paddingVertical: 16,
+                    paddingHorizontal: 20,
+                    borderRadius: 12,
+                    alignItems: 'center',
+                })}
+            >
+                <Text style={{ color: '#ffffff', fontSize: 16, fontWeight: '700' }}>Escanear QR</Text>
+            </Pressable>
             : <>
-                <Text>Para usar la app tenés que habilitar los permisos de cámara</Text>
-                <Button onClick={askForCameraPermission} title="Pedir permisos"/>
+                <View style={{ backgroundColor: '#ffffff', padding: 16, borderRadius: 12, borderWidth: 1, borderColor: '#e6e8eb' }}>
+                    <Text style={{ color: '#11181c', fontSize: 16, marginBottom: 12, textAlign: 'center' }}>Para usar la app tenés que habilitar los permisos de cámara</Text>
+                    <Pressable
+                        onPress={askForCameraPermission}
+                        style={({ pressed }) => ({
+                            backgroundColor: pressed ? '#0f172a' : '#11181c',
+                            paddingVertical: 14,
+                            borderRadius: 10,
+                            alignItems: 'center',
+                        })}
+                    >
+                        <Text style={{ color: '#ffffff', fontSize: 15, fontWeight: '700' }}>Pedir permisos</Text>
+                    </Pressable>
+                </View>
             </>
         }
     </View>);
@@ -44,15 +67,16 @@ export function Scan(){
         }
     }
 
-    return(<CameraView
-        facing={"back"}
-        barcodeScannerSettings={{
-            barcodeTypes: ["qr"]
-        }}
-        onBarcodeScanned={handleBarCodeScanned}
-        style={{flex: "1"}}
-    >
-    </CameraView>);
+    return(<View style={{ flex: 1, backgroundColor: '#000' }}>
+        <CameraView
+            facing={"back"}
+            barcodeScannerSettings={{
+                barcodeTypes: ["qr"]
+            }}
+            onBarcodeScanned={handleBarCodeScanned}
+            style={{ flex: 1 }}
+        />
+    </View>);
 }
 
 export function Result({route}){
@@ -61,9 +85,34 @@ export function Result({route}){
 
     const copyToClipboard = (async () => console.log(await Clipboard.setStringAsync(Resultado)));
 
-    return (<View>
-        <Text>Dato escaneado: {Resultado}</Text>
-        <Button onPress={async() => await Linking.openURL(Resultado)} title="Abrir link"/>
-        <Button onPress={copyToClipboard} title="Copiar al portapapeles"/>
+    return (<View style={{ flex: 1, backgroundColor: '#f7f7f8', padding: 16 }}>
+        <View style={{ backgroundColor: '#ffffff', borderRadius: 12, padding: 16, borderWidth: 1, borderColor: '#e6e8eb', marginBottom: 16 }}>
+            <Text style={{ color: '#64748b', marginBottom: 6, fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.5 }}>Dato escaneado</Text>
+            <Text selectable style={{ color: '#11181c', fontSize: 16 }}>{Resultado}</Text>
+        </View>
+        <View style={{ gap: 12 }}>
+            <Pressable
+                onPress={async() => await Linking.openURL(Resultado)}
+                style={({ pressed }) => ({
+                    backgroundColor: pressed ? '#0284c7' : '#0ea5e9',
+                    paddingVertical: 14,
+                    borderRadius: 10,
+                    alignItems: 'center',
+                })}
+            >
+                <Text style={{ color: '#ffffff', fontSize: 15, fontWeight: '700' }}>Abrir link</Text>
+            </Pressable>
+            <Pressable
+                onPress={copyToClipboard}
+                style={({ pressed }) => ({
+                    backgroundColor: pressed ? '#e2e8f0' : '#e6e8eb',
+                    paddingVertical: 14,
+                    borderRadius: 10,
+                    alignItems: 'center',
+                })}
+            >
+                <Text style={{ color: '#11181c', fontSize: 15, fontWeight: '700' }}>Copiar al portapapeles</Text>
+            </Pressable>
+        </View>
     </View>);
 }
