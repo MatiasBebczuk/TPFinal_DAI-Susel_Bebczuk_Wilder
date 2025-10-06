@@ -6,7 +6,7 @@ import * as Clipboard from "expo-clipboard";
 import * as Haptics from "expo-haptics";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export function Perms(){
+export function Perms(){  // permiso de cam //
     const navigator = useNavigation();
     const [hasPermission, setHasPermission] = useState(false);
     const askForCameraPermission = () => {
@@ -18,11 +18,11 @@ export function Perms(){
 
     useEffect(() => {
         askForCameraPermission();
-    }, []);
-
-    return (<View style={{ flex: 1, backgroundColor: '#f7f7f8', padding: 16, gap: 16, justifyContent: 'center' }}>
+    }, []);              // permiso de cam //
+    //operacion ternaria (en vez de usar if lo usamos directo), si el permiso es true la funcion se muestra, sino te pedira el permiso devuelta. 
+    return (<View style={{ flex: 1, backgroundColor: '#f7f7f8', padding: 16, gap: 16, justifyContent: 'center' }}>    
         {
-            hasPermission ?
+            hasPermission ? 
             <Pressable
                 onPress={() => navigator.navigate("Scan")}
                 style={({ pressed }) => ({
@@ -60,15 +60,17 @@ export function Scan(){
     const [scanned, setScanned] = useState(false);
     const handleBarCodeScanned = async({type, data}) => {
         if(!scanned){
-            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            await AsyncStorage.setItem("history", JSON.stringify([...(JSON.parse(await AsyncStorage.getItem("history")) ?? []), data]));
-            navigator.navigate("Result", {data: data});
+            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); //haptics para que cuando se escanee el qr vibre el dispositivo
+            await AsyncStorage.setItem("history", JSON.stringify([...(JSON.parse(await AsyncStorage.getItem("history")) ?? []), data])); //guarda en localstorage lo escaneado
+            navigator.navigate("Result", {data: data}); // muestra lo que se escaneo
             setScanned(true);
         }
     }
 
-    return(<View style={{ flex: 1, backgroundColor: '#000' }}>
-        <CameraView
+    //cuando returna usamos cameraview para que se vea en pantalla lo que se muestra en camara. 
+
+    return(<View style={{ flex: 1, backgroundColor: '#000' }}> 
+        <CameraView 
             facing={"back"}
             barcodeScannerSettings={{
                 barcodeTypes: ["qr"]
@@ -81,9 +83,9 @@ export function Scan(){
 
 export function Result({route}){
     const navigator = useNavigation();
-    const [Resultado, setResultado] = useState(route.params.data);
+    const [Resultado, setResultado] = useState(route.params.data); 
 
-    const copyToClipboard = (async () => console.log(await Clipboard.setStringAsync(Resultado)));
+    const copyToClipboard = (async () => console.log(await Clipboard.setStringAsync(Resultado)));  //copíar en portapapeles
 
     return (<View style={{ flex: 1, backgroundColor: '#f7f7f8', padding: 16 }}>
         <View style={{ backgroundColor: '#ffffff', borderRadius: 12, padding: 16, borderWidth: 1, borderColor: '#e6e8eb', marginBottom: 16 }}>
